@@ -27,16 +27,14 @@ class AppModule {
     private initMiddlewares(): void {
         this.express.use(urlencoded({ extended: false }))
         this.express.use(helmet())
-        this.express.use(cors({
-            credentials: true
-        }))
+        this.express.use(cors())
         this.express.use(compression())
         this.express.use(cookieParser())
     }
 
     private initControllers(controller: Controller[]): void {
         controller.forEach(controller => {
-            this.express.use('/api', controller.router)
+            this.express.use('/', controller.router)
         })
     }
 
@@ -44,7 +42,7 @@ class AppModule {
         mongoose.set("strictQuery", false);
         mongoose.connect(process.env.MONGO_URL)
             .then(() => console.log('Database connected'))
-            .catch(error => console.log(error))
+            .catch((error: Error) => console.log(error))
     }
 
     listen(): void {
