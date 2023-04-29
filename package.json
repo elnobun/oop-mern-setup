@@ -5,7 +5,8 @@
   "author": "Ellis Enobun",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon"
+    "start": "nodemon",
+    "start:prod": "node -r ts-node/register/transpile-only -r tsconfig-paths/register ./dist/src/index.js"
   },
   "devDependencies": {
     "@types/compression": "^1.7.2",
@@ -14,6 +15,7 @@
     "@types/morgan": "^1.9.4",
     "nodemon": "^2.0.22",
     "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.0.4"
   },
   "dependencies": {
