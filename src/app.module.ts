@@ -7,6 +7,8 @@ import mongoose from "mongoose"
 import helmet from 'helmet'
 
 import Controller from '@/interface/controller.interface'
+import expressAsyncHandler from 'express-async-handler'
+import { errorHandler, notFound } from './handlers/globalError.handler'
 
 class AppModule {
     express: Application
@@ -30,11 +32,13 @@ class AppModule {
         this.express.use(cors())
         this.express.use(compression())
         this.express.use(cookieParser())
+        this.express.all('*', notFound)
+        this.express.use(errorHandler)
     }
 
     private initControllers(controller: Controller[]): void {
         controller.forEach(controller => {
-            this.express.use('/', controller.router)
+            this.express.use('/', expressAsyncHandler(controller.router))
         })
     }
 
