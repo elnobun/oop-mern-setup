@@ -7,7 +7,6 @@ import mongoose from "mongoose"
 import helmet from 'helmet'
 
 import Controller from '@/interface/controller.interface'
-import expressAsyncHandler from 'express-async-handler'
 import { errorHandler, notFound } from './handlers/globalError.handler'
 
 class AppModule {
@@ -38,7 +37,7 @@ class AppModule {
 
     private initControllers(controller: Controller[]): void {
         controller.forEach(controller => {
-            this.express.use('/', expressAsyncHandler(controller.router))
+            this.express.use('/', controller.router)
         })
     }
 
