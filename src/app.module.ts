@@ -3,7 +3,7 @@ import http from 'http'
 import cors from 'cors'
 import compression from 'compression'
 import cookieParser from 'cookie-parser'
-import mongoose from "mongoose"
+import mongoose, { MongooseError } from "mongoose"
 import helmet from 'helmet'
 
 import Controller from '@/interface/controller.interface'
@@ -22,17 +22,17 @@ class AppModule {
         this.initDatabase()
         this.initControllers(Controllers)
         this.initMiddlewares()
-
     }
 
     private initMiddlewares(): void {
         this.express.use(urlencoded({ extended: false }))
+        this.express.all('*', notFound)
+        this.express.use(errorHandler)
         this.express.use(helmet())
         this.express.use(cors())
         this.express.use(compression())
         this.express.use(cookieParser())
-        this.express.all('*', notFound)
-        this.express.use(errorHandler)
+
     }
 
     private initControllers(controller: Controller[]): void {
@@ -45,12 +45,20 @@ class AppModule {
         mongoose.set("strictQuery", false);
         mongoose.connect(process.env.MONGO_URL)
             .then(() => console.log('Database connected'))
-            .catch((error: Error) => console.log(error))
+
     }
 
     listen(): void {
         const server = http.createServer(this.express)
         server.listen(this.port, () => console.log(`Server running on port ${this.port}`))
+
+        process.on('unhandledRejection', (error: MongooseError) => {
+            console.log(error.name, error.message);
+            console.log('Unhandled Rejection! server shutting down...');
+            server.close(() => {
+                process.exit(1)
+            })
+        })
     }
 }
 
