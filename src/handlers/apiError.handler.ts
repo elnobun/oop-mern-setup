@@ -14,6 +14,7 @@ class APIError extends Error {
     public statusCode: HttpStatusCode
     public status: string
     public isOperational: boolean
+    public code: number
 
     constructor(message: string, statusCode: HttpStatusCode,) {
         super(message)
