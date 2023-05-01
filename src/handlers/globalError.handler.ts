@@ -14,14 +14,12 @@ const validationErrorHandler = (error: any) => {
 }
 
 const devErrors = (res: Response, error: APIError) => {
-    if (!error.isOperational) {
-        return res.status(error.statusCode).json({
-            status: error.statusCode,
-            message: error.message,
-            stackTrace: error.stack,
-            error: error
-        })
-    }
+    return res.status(error.statusCode).json({
+        status: error.statusCode,
+        message: error.message,
+        stackTrace: error.stack,
+        error: error
+    })
 }
 
 const productionError = (res: Response, error: APIError) => {
