@@ -41,10 +41,23 @@ class AppModule {
         })
     }
 
-    private initDatabase() {
+    private async initDatabase() {
         mongoose.set("strictQuery", false);
-        mongoose.connect(process.env.MONGO_URL)
-            .then(() => console.log('Database connected'))
+        try {
+            await mongoose.connect(process.env.MONGO_URL)
+            console.log('Database connected')
+        } catch (error) {
+            throw error
+        }
+
+        mongoose.connection.on("disconnected", () => {
+            console.log("MongoDB disconnected!");
+        })
+
+        mongoose.connection.on("connected", () => {
+            console.log("MongoDB connected!");
+
+        })
 
     }
 
