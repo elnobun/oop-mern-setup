@@ -62,4 +62,4 @@ class AppModule {
     }
 }
 
-export default AppModule
+export const AppProvider = AppModule

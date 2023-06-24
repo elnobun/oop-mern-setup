@@ -1,8 +1,8 @@
 import "dotenv/config"
-import AppModule from "./app.module";
-import AppController from "./controllers/app.controller";
+import { AppProvider } from "./app.provider";
+import AppController from "./modules/controllers/app.controller";
 
-const app = new AppModule([
+const app = new AppProvider([
     new AppController()
 ], Number(process.env.PORT))
 app.listen()
